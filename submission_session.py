@@ -1,6 +1,6 @@
 import requests
-import re
 import urllib3
+import scrapers
 import functools
 
 def subdir(page):
@@ -44,21 +44,18 @@ def main_page():
     return s.get(subdir('StudentMain.php'))
 
 @login_required
-def problem_page(id):
-    expr_post_data = 'id="try-' + id + r'".*?(\{.+?\})'
-    match_post_data = re.search(expr_post_data, main_page().text, re.DOTALL)
-    if not match_post_data:
-        raise Exception('Problem ID ' + id + ' not found')
-
-    raw_post_data = match_post_data.group(1)
-    post_data = eval(raw_post_data)
-    return s.post(subdir('StudentTry.php'), data=post_data)
+def problem_page(problemNo):
+    payload = scrapers.get_problem_payload(main_page().text, problemNo)
+    if not payload:
+        raise Exception('Payload for problemNo: ' + problemNo + ' not found')
+    
+    return s.post(subdir('StudentTry.php'), data=payload)
 
 @login_required
-def upload_submission(id, token, source_name, source_path, comment=''):
+def upload_submission(problemNo, token, source_name, source_path, comment=''):
     submission_data = {
         'comment': '',
-        'problemNo': id,
+        'problemNo': problemNo,
         'token': token,
         'todo': 'processSubmission',
     }
@@ -66,10 +63,10 @@ def upload_submission(id, token, source_name, source_path, comment=''):
         'upFile0': (source_name, open(source_path), 'application/octet-stream'),
     }
 
-    submit = s.post(subdir('StudentProcessSubmit.php'), files=submission_files, data=submission_data)
-    submit_id_match = re.search(r'ID is (.*)\.', submit.text)
-    if not submit_id_match:
+    submit_page = s.post(subdir('StudentProcessSubmit.php'), files=submission_files, data=submission_data)
+    
+    submission_id = scrapers.get_submission_id(submit_page.text)
+    if not submission_id:
         raise Exception('Submission failed, no submission ID found')
     
-    submission_id = submit_id_match.group(1)
     return submission_id
