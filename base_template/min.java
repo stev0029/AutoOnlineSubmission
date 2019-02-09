@@ -1,9 +1,6 @@
 public class $CLASS_NAME$ {
     static final String[] CASE_OUTPUTS = $CASE_OUTPUTS$;
     public static void main(String[] args) throws Exception {
-        long start = System.currentTimeMillis();
-        if (start < $CODED_START$)
-            sleepUntil($CODED_START$);
         int caseNum = getCaseNum();
         System.out.print(CASE_OUTPUTS[caseNum]);
         sleepUntil($CODED_START$ + (caseNum + 1) * $TOTAL_MS$);

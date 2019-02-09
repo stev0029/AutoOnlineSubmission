@@ -54,7 +54,7 @@ def problem_page(problemNo):
 @login_required
 def upload_submission(problemNo, token, source_name, source_path, comment=''):
     submission_data = {
-        'comment': '',
+        'comment': comment,
         'problemNo': problemNo,
         'token': token,
         'todo': 'processSubmission',
@@ -64,7 +64,7 @@ def upload_submission(problemNo, token, source_name, source_path, comment=''):
     }
 
     submit_page = s.post(subdir('StudentProcessSubmit.php'), files=submission_files, data=submission_data)
-    
+
     submission_id = scrapers.get_submission_id(submit_page.text)
     if not submission_id:
         raise Exception('Submission failed, no submission ID found')
