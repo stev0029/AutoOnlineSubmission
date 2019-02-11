@@ -45,7 +45,7 @@ def main_page():
 
 @login_required
 def problem_page(problemNo):
-    payload = scrapers.get_problem_payload(main_page().text, problemNo)
+    payload = scrapers.get_problem_payload(main_page(), problemNo)
     if not payload:
         raise Exception('Payload for problemNo: ' + problemNo + ' not found')
     
@@ -65,7 +65,7 @@ def upload_submission(problemNo, token, source_name, source_path, comment=''):
 
     submit_page = s.post(subdir('StudentProcessSubmit.php'), files=submission_files, data=submission_data)
 
-    submission_id = scrapers.get_submission_id(submit_page.text)
+    submission_id = scrapers.get_submission_id(submit_page)
     if not submission_id:
         raise Exception('Submission failed, no submission ID found')
     

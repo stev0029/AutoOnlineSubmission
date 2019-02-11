@@ -11,3 +11,9 @@ def java_long(num):
 
 def java_int(num):
     return str(num)
+
+def desanitized(s):
+    return (s.replace('<span class="paraMark">&middot;</span>', ' ')
+        .replace('<span class="paraMark">&para;</span>', '')
+        .replace('&#039;', "'")
+        .replace('\n', '\\n'))
