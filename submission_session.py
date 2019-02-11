@@ -70,3 +70,21 @@ def upload_submission(problemNo, token, source_name, source_path, comment=''):
         raise Exception('Submission failed, no submission ID found')
     
     return submission_id
+
+@login_required
+def error_log(submissionNo, token):
+    submission_payload = {
+        'submissionNo': submissionNo,
+        'token': token,
+        'todo': 'viewErrorLog',
+    }
+
+    return s.post(subdir('StudentReview.php'), data=submission_payload).text
+
+@login_required
+def change_email(email):
+    payload = {
+        'email': email,
+        'todo': 'changeEmail',
+    }
+    return s.post(subdir('Settings.php'), data=payload)
