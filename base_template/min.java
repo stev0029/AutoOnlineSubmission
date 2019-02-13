@@ -3,16 +3,16 @@ public class $CLASS_NAME$ {
     public static void main(String[] args) throws Exception {
         int caseNum = getCaseNum();
         System.out.print(CASE_OUTPUTS[caseNum]);
-        sleepUntil($CODED_START$ + (caseNum + 1) * $TOTAL_MS$);
+        sleepUntil($CODED_START$ + (caseNum + 1) * $RUN_MS$);
     }
     static int getCaseNum() {
         long current = System.currentTimeMillis();
         long match = $CODED_START$;
         int i = 0;
         while (i < CASE_OUTPUTS.length) {
-            if (current - match < $TOTAL_MS$)
+            if (current - match < $RUN_MS$)
                 return i;
-            match += $TOTAL_MS$;
+            match += $RUN_MS$;
             i++;
         }
         return -1;
