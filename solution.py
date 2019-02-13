@@ -13,7 +13,7 @@ def make(class_name, case_outputs):
 
     java_source_table = {
         'CLASS_NAME': class_name,
-        'CODED_START': helpers.java_long(helpers.current_millis + DELAY_MS),
+        'CODED_START': helpers.java_long(helpers.current_millis() + DELAY_MS),
         'CASE_OUTPUTS': helpers.java_string_array(case_outputs),
         'RUN_MS': helpers.java_int(RUN_MS)
     }
